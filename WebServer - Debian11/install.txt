@@ -1,0 +1,54 @@
+tutor : https://www.youtube.com/watch?v=q-aEVvlm8gI
+
+cmd windows = ssh mm1rza@10.0.0.34
+
+hostname -I
+buat cek ip mu
+---------------------------------
+su
+cd
+sudo apt update && sudo apt upgrade -y
+sudo apt-get install apache2 net-tools default-mysql-server php phpmyadmin
+
+	apache ( SPASI ) trus enter
+
+sudo chown -R $USER:$USER /var/www
+clear
+
+mysql -u root -p
+password = root
+	show databases;
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'root';
+
+	berarti saiki login phpmyadmin root root yah
+	bisa ganti password sing halaman web e phpmyadmin e
+	
+	buka ip server nya
+	10.0.0.34
+	10.0.0.34/phpmyadmin
+	
+	sftp://10.0.0.34
+	SFTP lokasi /var/www/html
+---------------------------------
+dong ssh cmd windows eror hapus 
+folder .ssh
+%USERPROFILE%
+---------------------------------
+kie go edit langsung terminal
+nano /var/www/html/xxx.php
+---------------------------------
+kie go permision write and read
+sudo chmod -R 777 /var/www/html
+---------------------------------
+sudo systemctl start apache2
+sudo systemctl status apache2
+sudo systemctl restart apache2
+sudo systemctl restart mysql
+sudo service mysql restart
+---------------------------------
+dong laka SSH NE BOS !
+apt install openssh-server
+systemctl start ssh
+systemctl restart ssh
+systemctl enable ssh
+---------------------------------

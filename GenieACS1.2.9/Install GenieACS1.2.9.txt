@@ -1,0 +1,177 @@
+apt install curl
+curl -sL https://deb.nodesource.com/setup_14.x -o nodesource_setup.sh
+sudo bash nodesource_setup.sh
+sudo apt install nodejs
+
+echo "deb http://security.ubuntu.com/ubuntu impish-security main" | sudo tee /etc/apt/sources.list.d/impish-security.list
+sudo apt-get update
+sudo apt-get install libssl1.1
+
+
+curl -fsSL https://www.mongodb.org/static/pgp/server-4.4.asc | sudo apt-key add -
+============================================================================================================================================================
+pilih salah satu command di bawah dan sesuaikan dengan ubuntu servernya
+===================================
+==UBUNTU PRECISE (12.04)
+echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu precise/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list
+
+==UBUNTU TRUSTY (14.04)
+echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list
+
+==UBUNTU XENIAL (16.04)
+echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list
+
+==UBUNTU BIONIC (18.04)
+echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list
+
+==UBUNTU FOCAL (20.04)
+echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list
+
+==UBUNTU JAMMY (22.04)
+echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list
+---------------------------------------------------------------------------------
+==DEBIAN bulleyes (11)
+
+sudo apt-get install gnupg curl
+
+curl -fsSL https://www.mongodb.org/static/pgp/server-7.0.asc | \
+   sudo gpg -o /usr/share/keyrings/mongodb-server-7.0.gpg \
+   --dearmor
+
+echo "deb [ signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg ] http://repo.mongodb.org/apt/debian bullseye/mongodb-org/7.0 main" | sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list
+
+sudo apt-get update
+sudo apt-get install -y mongodb-org
+
+echo "mongodb-org hold" | sudo dpkg --set-selections
+echo "mongodb-org-database hold" | sudo dpkg --set-selections
+echo "mongodb-org-server hold" | sudo dpkg --set-selections
+echo "mongodb-mongosh hold" | sudo dpkg --set-selections
+echo "mongodb-org-mongos hold" | sudo dpkg --set-selections
+echo "mongodb-org-tools hold" | sudo dpkg --set-selections
+
+----------------------------------------------------------------------------
+
+
+
+sudo apt update
+sudo apt install mongodb-org -y
+
+sudo systemctl start mongod.service
+
+sudo systemctl status mongod
+
+sudo systemctl enable mongod
+mongosh --eval 'db.runCommand({ connectionStatus: 1 })'
+
+sudo npm install -g genieacs@1.2.9
+sudo useradd --system --no-create-home --user-group genieacs
+mkdir /opt/genieacs
+mkdir /opt/genieacs/ext
+chown genieacs:genieacs /opt/genieacs/ext
+
+nano /opt/genieacs/genieacs.env
+==input kedalam genieacs.env=================================
+
+GENIEACS_CWMP_ACCESS_LOG_FILE=/var/log/genieacs/genieacs-cwmp-access.log
+GENIEACS_NBI_ACCESS_LOG_FILE=/var/log/genieacs/genieacs-nbi-access.log
+GENIEACS_FS_ACCESS_LOG_FILE=/var/log/genieacs/genieacs-fs-access.log
+GENIEACS_UI_ACCESS_LOG_FILE=/var/log/genieacs/genieacs-ui-access.log
+GENIEACS_DEBUG_FILE=/var/log/genieacs/genieacs-debug.yaml
+NODE_OPTIONS=--enable-source-maps
+GENIEACS_EXT_DIR=/opt/genieacs/ext
+
+=========setelah input tekan ctrl+O, enter, ctrl+x====================
+
+node -e "console.log(\"GENIEACS_UI_JWT_SECRET=\" + require('crypto').randomBytes(128).toString('hex'))" >> /opt/genieacs/genieacs.env
+sudo chown genieacs:genieacs /opt/genieacs/genieacs.env
+sudo chmod 600 /opt/genieacs/genieacs.env
+mkdir /var/log/genieacs
+chown genieacs:genieacs /var/log/genieacs
+
+sudo systemctl edit --force --full genieacs-cwmp
+==input kedalam genieacs-cwmp=================================
+[Unit]
+Description=GenieACS CWMP
+After=network.target
+
+[Service]
+User=genieacs
+EnvironmentFile=/opt/genieacs/genieacs.env
+ExecStart=/usr/bin/genieacs-cwmp
+
+[Install]
+WantedBy=default.target
+=========setelah input tekan ctrl+O, enter, ctrl+x====================
+
+sudo systemctl edit --force --full genieacs-nbi
+==input kedalam genieacs-nbi=================================
+[Unit]
+Description=GenieACS NBI
+After=network.target
+
+[Service]
+User=genieacs
+EnvironmentFile=/opt/genieacs/genieacs.env
+ExecStart=/usr/bin/genieacs-nbi
+
+[Install]
+WantedBy=default.target
+=========setelah input tekan ctrl+O, enter, ctrl+x====================
+
+sudo systemctl edit --force --full genieacs-fs
+==input kedalam genieacs-fs=================================
+
+[Unit]
+Description=GenieACS FS
+After=network.target
+
+[Service]
+User=genieacs
+EnvironmentFile=/opt/genieacs/genieacs.env
+ExecStart=/usr/bin/genieacs-fs
+
+[Install]
+WantedBy=default.target
+=========setelah input tekan ctrl+O, enter, ctrl+x====================
+
+sudo systemctl edit --force --full genieacs-ui
+==input kedalam genieacs-ui=================================
+[Unit]
+Description=GenieACS UI
+After=network.target
+
+[Service]
+User=genieacs
+EnvironmentFile=/opt/genieacs/genieacs.env
+ExecStart=/usr/bin/genieacs-ui
+
+[Install]
+WantedBy=default.target
+=========setelah input tekan ctrl+O, enter, ctrl+x====================
+
+nano /etc/logrotate.d/genieacs
+==input kedalam genieacs-log=================================
+/var/log/genieacs/*.log /var/log/genieacs/*.yaml {
+    daily
+    rotate 30
+    compress
+    delaycompress
+    dateext
+}
+=========setelah input tekan ctrl+O, enter, ctrl+x====================
+sudo systemctl enable genieacs-cwmp
+sudo systemctl start genieacs-cwmp
+sudo systemctl enable genieacs-nbi
+sudo systemctl start genieacs-nbi
+sudo systemctl enable genieacs-fs
+sudo systemctl start genieacs-fs
+sudo systemctl enable genieacs-ui
+sudo systemctl start genieacs-ui
+
+
+ip a 
+buka di browser http://10.0.63.251:3000
+
+
+

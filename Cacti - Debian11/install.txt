@@ -1,0 +1,32 @@
+tutor : https://www.youtube.com/watch?v=DpGUiScWiqQ&t=8s
+
+cmd windows = ssh mm1rza@10.0.0.34
+
+hostname -I
+buat cek ip mu
+---------------------------------
+debian-11.10.0-amd64-netinst
+---------------------------------
+login username dan pass
+su trus pass root e
+
+wget https://raw.githubusercontent.com/mm1rza/install-cacti-simple-debian/main/install_cacti.sh
+chmod +x install_cacti.sh
+sh install_cacti.sh
+
+
+nama db : cactimnet
+pass db : cacti@2024
+
+login
+username : admin
+password : admin
+url ip server
+
+Awazadawewe123!@#
+
+
+centang accept / next terus 
+PILIH RRDtool 1.8++ atau terbaru
+finish
+ 

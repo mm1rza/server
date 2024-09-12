@@ -1,0 +1,48 @@
+tutor
+https://www.youtube.com/watch?v=X4syx4gMzjg&t=8s
+
+
+
+
+
+dnf -y install dnsmasq
+firewall-cmd --add-service=dns --permanent
+firewall-cmd --reload
+systemctl enable dnsmasq
+mv /etc/dnsmasq.conf /etc/dnsmasq.conf.ori
+vi /etc/dnsmasq.conf
+		port=53
+		domain-needed
+		bogus-priv
+		strict-order
+		no-resolv
+		server=8.8.8.8
+		server=8.8.4.4
+		local=/almalinux.int/
+		listen-address=127.0.0.1,10.0.0.43
+		expand-hosts
+		domain=almalinux.int
+
+-------------------------------------
+Anda dapat menyimpan dan keluar dengan mengetik :wq.
+save = :x
+-------------------------------------
+chown root.dnsmasq /etc/dnsmasq.conf
+ls -al /etc/dnsmasq.conf
+
+vi /etc/hosts
+		10.0.0.43	os
+		10.0.0.43	www
+
+systemctl start dnsmasq
+systemctl status dnsmasq
+
+-------------------------------------
+exit = ctrl + c
+-------------------------------------
+
+
+
+instal nslookup di almalinux
+
+dnf install bind-utils

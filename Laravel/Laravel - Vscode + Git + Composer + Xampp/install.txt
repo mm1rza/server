@@ -1,0 +1,22 @@
+----------------------------
+ke HTDOCS
+
+git clone https://github.com/aji-wibowo/e-sakip-brebes.git
+
+code .
+
+composer install
+dong ora bisa paksa
+composer install --ignore-platform-reqs
+composer update --no-scripts
+
+
+cp .env.example .env
+php artisan key:generate
+php artisan migrate
+php artisan db:seed
+php artisan serve
+----------------------------
+
+
+download composer https://getcomposer.org/Composer-Setup.exe

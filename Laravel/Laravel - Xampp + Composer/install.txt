@@ -1,0 +1,22 @@
+tutor : https://www.youtube.com/watch?v=fS6X0Ag6WcA
+
+---------------------------------
+
+install dulu composer dan xampp
+
+xampp > shell
+
+cd\xampp\htdocs
+
+composer global require laravel/installer
+ 
+laravel new example-app
+
+cd example-app
+ 
+php artisan serve
+---------------------------------
+
+cd\xampp\htdocs\e-sakip-brebes-master
+
+php artisan serve
